@@ -1,5 +1,8 @@
 <template>
-  <list></list>
+  <view>
+    <child></child>
+    <list></list>
+  </view>
 </template>
 
 <script>
@@ -15,7 +18,8 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "list": "../components/list"
+      "list": "../components/list",
+      "child": "../components/child"
     }
   }
 </script>
