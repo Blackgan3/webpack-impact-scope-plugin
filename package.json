@@ -1,0 +1,57 @@
+{
+  "name": "webpack-impact-scope-plugin",
+  "version": "1.0.0",
+  "description": "自动检测代码改动影响面并可视化依赖分析",
+  "main": "dist/ImpactScopeWebpackPlugin.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "impact": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --watch src --exec ts-node src/index.ts",
+    "test": "jest",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "webpack",
+    "impact",
+    "dependency",
+    "mpx",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.14.0",
+  "dependencies": {
+    "commander": "^14.0.2",
+    "simple-git": "^3.30.0",
+    "chalk": "^5.6.2"
+  },
+  "peerDependencies": {
+    "webpack": "^5.0.0",
+    "@mpxjs/webpack-plugin": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.2",
+    "@types/chalk": "^2.2.4",
+    "@types/commander": "^2.12.5",
+    "@types/node": "^24.10.0",
+    "@types/webpack": "^5.28.5",
+    "@types/webpack-node-externals": "^3.0.4",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.2",
+    "nodemon": "^3.1.10",
+    "simple-git": "^3.30.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  }
+}

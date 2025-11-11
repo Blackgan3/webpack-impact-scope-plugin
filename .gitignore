@@ -1,0 +1,24 @@
+# Node
+node_modules/
+dist/
+pnpm-lock.yaml
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# e2e
+/e2e/mpx-app/node_modules/
+/e2e/mpx-app/dist/
+/e2e/mpx-app/pnpm-lock.yaml
+/e2e/mpx-app/.DS_Store
+
+# System
+.DS_Store
+Thumbs.db
+
+# Test
+coverage/
