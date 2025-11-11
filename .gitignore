@@ -13,6 +13,7 @@ pnpm-lock.yaml
 # e2e
 /e2e/mpx-demo/node_modules/
 /e2e/mpx-demo/dist/
+/e2e/mpx-demo/impact-report/
 /e2e/mpx-demo/pnpm-lock.yaml
 /e2e/mpx-demo/.DS_Store
 
