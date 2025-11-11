@@ -11,10 +11,10 @@ pnpm-lock.yaml
 .idea/
 
 # e2e
-/e2e/mpx-app/node_modules/
-/e2e/mpx-app/dist/
-/e2e/mpx-app/pnpm-lock.yaml
-/e2e/mpx-app/.DS_Store
+# /e2e/mpx-app/node_modules/
+# /e2e/mpx-app/dist/
+# /e2e/mpx-app/pnpm-lock.yaml
+# /e2e/mpx-app/.DS_Store
 
 # System
 .DS_Store
