@@ -1,47 +1,4 @@
-const { writeFileSync } = require('fs');
-const { resolve } = require('path');
-
-function printTable(report) {
-  console.log('\n📦 Changed Files');
-  report.changedFiles.forEach(f => console.log(`  • ${f}`));
-  console.log('\n🎯 Affected Mpx Entries');
-  report.affectedMpxEntries.forEach(f => console.log(`  • ${f}`));
-  console.log('\n📱 Affected Cross-Bundles');
-  report.affectedBundles.forEach(b => console.log(`  • ${b}`));
-}
-
-function generateHtml(report, outPath) {
-  const nodes = [
-    ...report.changedFiles.map(f => `"${f}"`),
-    ...report.affectedMpxEntries.map(f => `"${f}"`),
-    ...report.affectedBundles.map(b => `"bundle:${b}"`)
-  ].join(',');
-
-  const html = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Impact Analysis</title>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <h2>Impact Graph</h2>
-  <div class="mermaid">
-    graph TD;
-      ${nodes}
-  </div>
-  <script>mermaid.initialize({startOnLoad:true});</script>
-</body>
-</html>`;
-  writeFileSync(resolve(outPath), html, 'utf-8');
-}
-
-const fs = require('fs');
-
-function generateChangedModulesHtml(changedModules, htmlPath) {
-  const data = JSON.stringify(changedModules);
-
-  const htmlContent = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -188,7 +145,7 @@ function generateChangedModulesHtml(changedModules, htmlPath) {
     const expandBtn = document.getElementById('expandAll');
     const collapseBtn = document.getElementById('collapseAll');
 
-    let data = ${data};
+    let data = [{"id":"/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/components/child.mpx","parent":[{"id":"/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/pages/index.mpx?isFirst&isPage","parent":[{"id":"/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/app.mpx","parent":[]}]}]},{"id":"/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/components/list.mpx","parent":[{"id":"/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/pages/index.mpx?isFirst&isPage","parent":[{"id":"/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/app.mpx","parent":[]}]}]},{"id":"/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/pages/index.mpx?isFirst&isPage","parent":[{"id":"/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/app.mpx","parent":[]}]}];
 
     function renderNode(node, container, depth = 0) {
       const nodeEl = document.createElement('div');
@@ -196,11 +153,11 @@ function generateChangedModulesHtml(changedModules, htmlPath) {
 
       const card = document.createElement('div');
       card.className = 'card ' + (depth === 0 ? 'root' : 'parent');
-      const displayId = node.id.replace(/^\\/Users\\/didi\\/blackdir\\/webpack-impact-scope-plugin\\/e2e\\/mpx-demo\\//, '');
-      card.innerHTML = \`
+      const displayId = node.id.replace(/^\/Users\/didi\/blackdir\/webpack-impact-scope-plugin\/e2e\/mpx-demo\//, '');
+      card.innerHTML = `
         <svg class="icon" viewBox="0 0 24 24"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>
-        <span class="label" title="\${node.id}">\${displayId}</span>
-      \`;
+        <span class="label" title="${node.id}">${displayId}</span>
+      `;
       nodeEl.appendChild(card);
 
       const childrenEl = document.createElement('div');
@@ -241,9 +198,4 @@ function generateChangedModulesHtml(changedModules, htmlPath) {
     render();
   </script>
 </body>
-</html>`;
-
-  fs.writeFileSync(htmlPath, htmlContent, 'utf-8');
-}
-
-module.exports = { printTable, generateHtml, generateChangedModulesHtml };
+</html>

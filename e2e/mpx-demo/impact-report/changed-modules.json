@@ -1,0 +1,39 @@
+[
+  {
+    "id": "/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/components/child.mpx",
+    "parent": [
+      {
+        "id": "/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/pages/index.mpx?isFirst&isPage",
+        "parent": [
+          {
+            "id": "/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/app.mpx",
+            "parent": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/components/list.mpx",
+    "parent": [
+      {
+        "id": "/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/pages/index.mpx?isFirst&isPage",
+        "parent": [
+          {
+            "id": "/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/app.mpx",
+            "parent": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/pages/index.mpx?isFirst&isPage",
+    "parent": [
+      {
+        "id": "/Users/didi/blackdir/webpack-impact-scope-plugin/e2e/mpx-demo/src/app.mpx",
+        "parent": []
+      }
+    ]
+  }
+]

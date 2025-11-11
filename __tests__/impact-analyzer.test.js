@@ -1,5 +1,5 @@
 const { ImpactAnalyzer } = require('../impact-analyzer');
-const { GitDiffCollectorImpl } = require('../git-diff-collector');
+const { GitDiffCollectorImpl } = require('../src/git-diff-collector');
 const { MpxDependencyGraph } = require('../mpx-dependency-graph');
 const { CrossBundleMatcher } = require('../cross-bundle-matcher');
 const { writeFileSync, mkdirSync, rmSync } = require('fs');

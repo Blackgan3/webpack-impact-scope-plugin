@@ -24,11 +24,14 @@ module.exports = defineConfig({
    * 可以将configureWebpack.snap.managedPaths修改为 []
    */
   configureWebpack(config) {
-    config.cache = false;
+    config.cache = {
+      type: 'filesystem',
+    }
     config.plugins = config.plugins || []
     config.plugins.push(new ImpactScopeWebpackPlugin({
       bundleRulePath: './bundle-rules.json',
-      enablePreview: true
+      enablePreview: true,
+      branch: 'master',
     }))
   }
 })

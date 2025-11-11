@@ -22,8 +22,6 @@ class ImpactScopeWebpackPlugin {
       m.resource && m.resource.includes('.mpx')
     );
     
-    console.log('Found .mpx modules:', mpxModules.map((m) => m.resource));
-    
     // 为每个 .mpx 模块创建 entry node
     mpxModules.forEach((module) => {
       const request = module.resource;
@@ -41,21 +39,27 @@ class ImpactScopeWebpackPlugin {
   }
 
   apply(compiler) {
-    const { commit, branch, bundleRulePath, outputPath, enablePreview } = this.options
+    const { commit, branch, outputPath, enablePreview } = this.options
 
     compiler.hooks.compilation.tap('ImpactScopeWebpackPlugin', (compilation) => {
-
-      compilation.hooks.buildModule.tap('ImpactScopeWebpackPlugin', (module) => {
-        if (module.request && module.resource && module.resource.includes('.mpx')) {
-          this.idModuleMap.set(module.rawRequest, module);
-        }
-      });
-
       compilation.hooks.finishModules.tapAsync('ImpactScopeWebpackPlugin', async (modules, callback) => {
         try {
+          for (const module of modules) {
+            if (module.request && module.resource && module.resource.includes('.mpx')) {
+              const normalizedRequest = module.rawRequest.split('?')[0];
+              this.idModuleMap.set(normalizedRequest, module);
+            }
+          }
           // 1. 收集 git diff
           const git = new GitDiffCollectorImpl(compiler.context)
-          const relativeChangedFiles = commit ? await git.listChangedFiles(commit) : await git.listChangedFiles()
+          let relativeChangedFiles;
+          if (branch) {
+            relativeChangedFiles = await git.listChangedFilesBetweenBranches(branch);
+          } else if (commit) {
+            relativeChangedFiles = await git.listChangedFiles(commit);
+          } else {
+            relativeChangedFiles = await git.listChangedFiles();
+          }
           const changedFiles = relativeChangedFiles.map(file => require('path').resolve(git.root, file));
           const mpx = compilation.__mpx__ || {}
           
@@ -86,12 +90,10 @@ class ImpactScopeWebpackPlugin {
           // ensure dir exist
           fs.mkdirSync(path.dirname(jsonPath), { recursive: true });
           fs.writeFileSync(jsonPath, JSON.stringify(changedModules, null, 2));
-          console.log(`Changed modules saved to ${jsonPath}`);
 
           // 生成静态 HTML
           const htmlPath = path.resolve(compiler.context, outputPath, 'visualizer.html');
           generateChangedModulesHtml(changedModules, htmlPath);
-          console.log(`Visualization generated at ${htmlPath}`);
 
           if (enablePreview) {
             this.startPreviewServer(path.dirname(htmlPath));
