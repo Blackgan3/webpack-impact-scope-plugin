@@ -1,4 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
+const { ImpactScopeWebpackPlugin } = require('../../dist/ImpactScopeWebpackPlugin.js')
+
 module.exports = defineConfig({
   outputDir: `dist/${process.env.MPX_CURRENT_TARGET_MODE}`,
   pluginOptions: {
@@ -21,5 +23,10 @@ module.exports = defineConfig({
    * 如果希望node_modules下的文件时对应的缓存可以失效，
    * 可以将configureWebpack.snap.managedPaths修改为 []
    */
-  configureWebpack(config) {}
+  configureWebpack(config) {
+    config.plugins = config.plugins || []
+    config.plugins.push(new ImpactScopeWebpackPlugin({
+      bundleRulePath: './bundle-rules.json'
+    }))
+  }
 })
