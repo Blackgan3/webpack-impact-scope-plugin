@@ -1,5 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
-const { ImpactScopeWebpackPlugin } = require('../../dist/ImpactScopeWebpackPlugin.js')
+const { ImpactScopeWebpackPlugin } = require('../../src/ImpactScopeWebpackPlugin.js')
 
 module.exports = defineConfig({
   outputDir: `dist/${process.env.MPX_CURRENT_TARGET_MODE}`,
@@ -24,9 +24,11 @@ module.exports = defineConfig({
    * 可以将configureWebpack.snap.managedPaths修改为 []
    */
   configureWebpack(config) {
+    config.cache = false;
     config.plugins = config.plugins || []
     config.plugins.push(new ImpactScopeWebpackPlugin({
-      bundleRulePath: './bundle-rules.json'
+      bundleRulePath: './bundle-rules.json',
+      enablePreview: true
     }))
   }
 })
