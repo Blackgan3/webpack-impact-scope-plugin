@@ -1,6 +1,6 @@
 {
   "name": "webpack-impact-scope-plugin",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "自动检测代码改动影响面并可视化依赖分析",
   "main": "src/ImpactScopeWebpackPlugin.js",
   "files": [
@@ -9,8 +9,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
-    "test": "jest",
-    "prepublishOnly": "pnpm run build"
+    "test": "jest"
   },
   "keywords": [
     "webpack",

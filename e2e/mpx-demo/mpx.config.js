@@ -31,6 +31,7 @@ module.exports = defineConfig({
     config.plugins.push(new ImpactScopeWebpackPlugin({
       bundleRulePath: './bundle-rules.json',
       enablePreview: true,
+      outputPath: '',
       branch: 'master',
     }))
   }

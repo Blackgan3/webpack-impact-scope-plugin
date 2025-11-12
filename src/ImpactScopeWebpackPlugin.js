@@ -1,7 +1,8 @@
 const { GitDiffCollectorImpl } = require('./git-diff-collector')
 const { generateChangedModulesHtml } = require('./visualizer')
-const express = require('express');
-
+const express = require('express')
+const fs = require('fs')
+const path = require('path')
 class ImpactScopeWebpackPlugin {
   constructor(options = {}) {
     this.options = {
@@ -11,31 +12,6 @@ class ImpactScopeWebpackPlugin {
     }
     this.idModuleMap = new Map()
     this.server = null
-  }
-
-  buildEntryNodeModulesMap(modules, context) {
-    const entryMap = new Map();
-    const moduleArray = Array.from(modules);
-    
-    // 过滤出 .mpx 文件
-    const mpxModules = moduleArray.filter((m) => 
-      m.resource && m.resource.includes('.mpx')
-    );
-    
-    // 为每个 .mpx 模块创建 entry node
-    mpxModules.forEach((module) => {
-      const request = module.resource;
-      // 使用相对于项目根目录的路径，与 git diff 收集器保持一致
-       const relativePath = require('path').relative(context, request);
-      
-      entryMap.set(relativePath, {
-        module: { request: relativePath },
-        parents: new Set(),
-        children: new Set()
-      });
-    });
-    
-    return entryMap;
   }
 
   apply(compiler) {
@@ -76,16 +52,16 @@ class ImpactScopeWebpackPlugin {
 
           changedFiles.map(file => {
             const module = this.idModuleMap.get(file)
-            const mpxModule = mpx?.getEntryNode(module)
-            if (mpxModule) {
-              const tree = buildParentTree(mpxModule);
-              changedModules.push(tree);
+            if (module) {
+              const mpxModule = mpx?.getEntryNode(module)
+              if (mpxModule) {
+                const tree = buildParentTree(mpxModule);
+                changedModules.push(tree);
+              }
             }
           })
 
           // 将 changedModules 写入 JSON 文件
-          const fs = require('fs');
-          const path = require('path');
           const jsonPath = path.resolve(compiler.context, outputPath, 'changed-modules.json');
           // ensure dir exist
           fs.mkdirSync(path.dirname(jsonPath), { recursive: true });
@@ -95,16 +71,19 @@ class ImpactScopeWebpackPlugin {
           const htmlPath = path.resolve(compiler.context, outputPath, 'visualizer.html');
           generateChangedModulesHtml(changedModules, htmlPath);
 
-          if (enablePreview) {
-            this.startPreviewServer(path.dirname(htmlPath));
-          }
-
           callback()
         } catch (err) {
           callback(err)
         }
       })
     })
+
+    compiler.hooks.done.tap('ImpactScopeWebpackPlugin', (stats) => {
+      if (enablePreview) {
+        const outputDir = path.resolve(compiler.context, outputPath);
+        this.startPreviewServer(outputDir);
+      }
+    });
   }
 
   startPreviewServer(outputDir) {
